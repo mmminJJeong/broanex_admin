@@ -1,0 +1,22 @@
+.side-nav-section {
+  background-color: #3472d1;
+  width: 15%;
+  height: 100vh;
+  padding: 20px 5px;
+}
+
+.gnb-wrapper {
+  width: 200px;
+  margin: 0 auto;
+  height: 100%;
+}
+
+.gnb-wrapper ul li {
+  margin: 20px 0;
+}
+
+.gnb-contents {
+  text-decoration: none;
+  color: #fff;
+  font-size: 18px;
+}
