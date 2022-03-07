@@ -1,0 +1,53 @@
+.main-wrapper {
+  width: 80%;
+  height: auto;
+  position: absolute;
+  left: 265px;
+  top: 95px;
+  padding: 20px;
+}
+
+.ck-editor__editable:not(.ck-editor__nested-editable) {
+  min-height: 400px;
+}
+
+.news-title {
+  padding: 10px 0;
+  margin: 20px 0;
+}
+
+.news-title h2 {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.submit-button {
+  padding: 5px 10px;
+  background-color: dodgerblue;
+  color: #fff;
+  font-weight: 600;
+  outline: none;
+  border: 0;
+  width: 100px;
+  height: 30px;
+  border-radius: 12px;
+  margin-top: 20px;
+  position: absolute;
+  right: 0;
+}
+
+.editor-inside {
+  position: relative;
+}
+
+.input-title {
+  width: 60%;
+  height: 30px;
+  margin-bottom: 20px;
+}
+
+.news-container {
+  border: 1px solid #cfcfcf;
+  width: 80%;
+  height: 200px;
+}
