@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import parse from "html-react-parser";
 import "./page.css";
+import axios from "axios";
 
 export default function NewsEditor() {
   const [newscontent, setNewsContent] = useState({
@@ -11,6 +12,23 @@ export default function NewsEditor() {
   });
 
   const [viewContent, setViewContent] = useState([]);
+
+  useEffect(() => {
+    axios.get("http://localhost:8000/api/get").then(response => {
+      setViewContent(response.data);
+    });
+  }, [viewContent]);
+
+  const submitNews = () => {
+    axios
+      .post("http://localhost:8000/api/insert", {
+        title: newscontent.title,
+        content: newscontent.title,
+      })
+      .then(() => {
+        alert("등록 완료!");
+      });
+  };
 
   const getValue = e => {
     const { name, value } = e.target;
@@ -68,12 +86,7 @@ export default function NewsEditor() {
             console.log("Focus.", editor);
           }}
         />
-        <button
-          className="submit-button"
-          onClick={() => {
-            setViewContent(viewContent.concat({ ...newscontent }));
-          }}
-        >
+        <button className="submit-button" onClick={submitNews}>
           입력
         </button>
       </div>
