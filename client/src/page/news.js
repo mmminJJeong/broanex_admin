@@ -3,7 +3,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import parse from "html-react-parser";
 import "./page.css";
-import axios from "axios";
+import Axios from "axios";
 
 export default function NewsEditor() {
   const [newscontent, setNewsContent] = useState({
@@ -14,23 +14,21 @@ export default function NewsEditor() {
   const [viewContent, setViewContent] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:8000/api/get").then(response => {
+    Axios.get("http://localhost:8000/api/getNewsList").then((response) => {
       setViewContent(response.data);
     });
-  }, [viewContent]);
+  }, []);
 
   const submitNews = () => {
-    axios
-      .post("http://localhost:8000/api/insert", {
-        title: newscontent.title,
-        content: newscontent.title,
-      })
-      .then(() => {
-        alert("등록 완료!");
-      });
+    Axios.post("http://localhost:8000/api/insert", {
+      title: newscontent.title,
+      content: newscontent.title,
+    }).then(() => {
+      alert("등록 완료!");
+    });
   };
 
-  const getValue = e => {
+  const getValue = (e) => {
     const { name, value } = e.target;
     setNewsContent({
       ...newscontent,
@@ -45,8 +43,8 @@ export default function NewsEditor() {
         <h2>게시물</h2>
       </div>
       <div className="news-container">
-        {viewContent.map(Element => (
-          <div>
+        {viewContent.map((Element, index) => (
+          <div key={index}>
             <h2>{Element.title}</h2>
             <div>{parse(Element.content)}</div>
           </div>
@@ -66,9 +64,9 @@ export default function NewsEditor() {
         <CKEditor
           editor={ClassicEditor}
           data="<p>내용을 입력해주세요.</p>"
-          onReady={editor => {
+          onReady={(editor) => {
             // You can store the "editor" and use when it is needed.
-            console.log("Editor is ready to use!", editor);
+            console.log("Editor is ready to use!");
           }}
           onChange={(event, editor) => {
             const data = editor.getData();
@@ -78,12 +76,6 @@ export default function NewsEditor() {
               content: data,
             });
             console.log(newscontent);
-          }}
-          onBlur={(event, editor) => {
-            console.log("Blur.", editor);
-          }}
-          onFocus={(event, editor) => {
-            console.log("Focus.", editor);
           }}
         />
         <button className="submit-button" onClick={submitNews}>

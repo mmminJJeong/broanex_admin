@@ -8,12 +8,12 @@ export default function SideMenu() {
       <nav className="gnb-wrapper">
         <ul>
           <li>
-            <Link to="/" className="gnb-contents">
+            <Link to="/news" className="gnb-contents">
               뉴스 글 관리
             </Link>
           </li>
           <li>
-            <Link to="/" className="gnb-contents">
+            <Link to="/notice" className="gnb-contents">
               공지사항 관리
             </Link>
           </li>
