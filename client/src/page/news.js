@@ -20,10 +20,11 @@ export default function NewsEditor() {
   }, []);
 
   const submitNews = () => {
-    Axios.post("http://localhost:8000/api/insert", {
+    Axios.post("http://localhost:8000/api/saveNews", {
       title: newscontent.title,
       content: newscontent.title,
-    }).then(() => {
+    }).then((response) => {
+      console.log(response);
       alert("등록 완료!");
     });
   };

@@ -27,9 +27,9 @@ router.get("/getNewsList", (req, res) => {
 router.post("/saveNews", (req, res) => {
   const title = req.body.title;
   const content = req.body.content;
-  const sqlQuery = "SELECT * FROM sample.test (title, content) VALUES (?,?)";
+  const sqlQuery = "INSERT INTO sample.test (title, content) VALUES (?,?)";
   db.query(sqlQuery, [title, content], (err, result) => {
-    res.send("success!");
+    res.send(err);
   });
 });
 
