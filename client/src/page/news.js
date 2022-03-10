@@ -5,6 +5,23 @@ import parse from "html-react-parser";
 import "./page.css";
 import Axios from "axios";
 
+// import EasyImage from "@ckeditor/ckeditor5-easy-image/src/easyimage";
+// import Image from "@ckeditor/ckeditor5-image/src/image";
+// import ImageCaption from "@ckeditor/ckeditor5-image/src/imagecaption";
+// import ImageStyle from "@ckeditor/ckeditor5-image/src/imagestyle";
+// import ImageToolbar from "@ckeditor/ckeditor5-image/src/imagetoolbar";
+// import ImageUpload from "@ckeditor/ckeditor5-image/src/imageupload";
+
+// import Bold from "@ckeditor/ckeditor5-basic-styles/src/bold";
+// import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
+// import Essentials from "@ckeditor/ckeditor5-essentials/src/essentials";
+// import Paragraph from "@ckeditor/ckeditor5-paragraph/src/paragraph";
+
+// const editorConfiguration = {
+//   plugins: [Paragraph, Bold, Italic, Essentials],
+//   toolbar: ["bold", "italic"],
+// };
+
 export default function NewsEditor() {
   const [newscontent, setNewsContent] = useState({
     title: "",
@@ -14,22 +31,22 @@ export default function NewsEditor() {
   const [viewContent, setViewContent] = useState([]);
 
   useEffect(() => {
-    Axios.get("http://localhost:8000/api/getNewsList").then((response) => {
+    Axios.get("http://localhost:8000/news/getNewsList").then(response => {
       setViewContent(response.data);
     });
   }, []);
 
   const submitNews = () => {
-    Axios.post("http://localhost:8000/api/saveNews", {
+    Axios.post("http://localhost:8000/news/saveNews", {
       title: newscontent.title,
-      content: newscontent.title,
-    }).then((response) => {
+      content: newscontent.content,
+    }).then(response => {
       console.log(response);
       alert("등록 완료!");
     });
   };
 
-  const getValue = (e) => {
+  const getValue = e => {
     const { name, value } = e.target;
     setNewsContent({
       ...newscontent,
@@ -65,7 +82,7 @@ export default function NewsEditor() {
         <CKEditor
           editor={ClassicEditor}
           data="<p>내용을 입력해주세요.</p>"
-          onReady={(editor) => {
+          onReady={editor => {
             // You can store the "editor" and use when it is needed.
             console.log("Editor is ready to use!");
           }}
@@ -78,6 +95,7 @@ export default function NewsEditor() {
             });
             console.log(newscontent);
           }}
+          // config={editorConfiguration}
         />
         <button className="submit-button" onClick={submitNews}>
           입력

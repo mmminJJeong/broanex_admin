@@ -17,19 +17,17 @@ const db = mysql.createPool({
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
-//불러오는 주소
-router.get("/getNewsList", (req, res) => {
-  const sqlQuery = "SELECT * FROM sample.news;";
+router.get("/getNoticeList", (req, res) => {
+  const sqlQuery = "SELECT * FROM sample.notice;";
   db.query(sqlQuery, (err, result) => {
     res.send(result);
   });
 });
 
-//저장하는 주소
-router.post("/saveNews", (req, res) => {
+router.post("/saveNotice", (req, res) => {
   const title = req.body.title;
   const content = req.body.content;
-  const sqlQuery = "INSERT INTO sample.news (title, content) VALUES (?,?)";
+  const sqlQuery = "INSERT INTO sample.notice (title, content) VALUES (?,?)";
   db.query(sqlQuery, [title, content], (err, result) => {
     res.send(err);
   });
