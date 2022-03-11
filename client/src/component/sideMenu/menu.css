@@ -11,12 +11,20 @@
   height: 100%;
 }
 
-.gnb-wrapper ul li {
-  margin: 20px 0;
+.gnb-wrapper ul > li {
+  margin-bottom: 40px;
 }
 
 .gnb-contents {
   text-decoration: none;
   color: #fff;
-  font-size: 18px;
+  font-size: 16px;
+}
+
+.ghb-sub {
+  padding-left: 10px;
+}
+
+.ghb-sub ul > li {
+  margin: 15px 0;
 }

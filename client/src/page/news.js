@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 
 //글 작성 에디터
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import parse from "html-react-parser";
 import Axios from "axios";
-import Paging from "../component/Paging";
 
 //css
 import "./page.css";
@@ -27,29 +24,6 @@ export default function NewsEditor() {
     title: "",
     content: "",
   });
-
-  const [viewContent, setViewContent] = useState([]);
-
-  const [page, setPage] = useState(0);
-  const [total, setTotal] = useState(0);
-  const [totalPage, setTotalPage] = useState(0);
-
-  // 글 목록 불러오기
-  useEffect(() => {
-    Axios.get("http://localhost:8000/news/getNewsList")
-      .then(response => {
-        setViewContent(response.data);
-      })
-      .then(response => {
-        setTotal(Math.ceil(response.data.totalElements));
-        setTotalPage(Math.ceil(response.data.totalPages));
-      })
-      .then(() => {
-        if (page > total) {
-          setPage(0);
-        }
-      });
-  }, [page, total]);
 
   //글 작성 업로드
   const submitNews = () => {
@@ -73,34 +47,6 @@ export default function NewsEditor() {
 
   return (
     <div className="main-wrapper">
-      <div className="news-title">
-        <h2>게시물</h2>
-      </div>
-
-      {/*  글 목록 */}
-      <div className="List">
-        <div className="list_grid list_tit">
-          <div> 제목 </div>
-          <div> 내용 </div>
-        </div>
-
-        {viewContent.map((Element, index) => (
-          <div className="list_grid list_data" key={index}>
-            <h2>
-              <Link to="/view">{Element.title}</Link>
-            </h2>
-
-            <div className="acenter">{parse(Element.content)}</div>
-          </div>
-        ))}
-      </div>
-      <Paging
-        page={page}
-        total={total}
-        setPage={setPage}
-        totalPage={totalPage}
-      />
-
       {/* 글작성 */}
       <div className="news-title">
         <h2>뉴스 게시글 작성</h2>

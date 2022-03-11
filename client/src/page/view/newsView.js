@@ -1,25 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 // import axios from "axios";
 
-import "./page.css";
+import "../page.css";
 
-const PostView = ({ history, location, match }) => {
-  //   const [data, setData] = useState({});
-
-  //   const { no } = match.params;
-
-  //   const getPostByNo = no => {
-  //     const array = postList.filter(x => x.no == no);
-  //     if (array.length == 1) {
-  //       return array[0];
-  //     }
-  //     return null;
-  //   };
-
-  //   useEffect(() => {
-  //     setData(getPostByNo(no));
-  //   }, []);
+function NewsPostView() {
+  const navigate = useNavigate(); // 뒤로가기 v6라서 usehistory =>navigate
 
   return (
     <>
@@ -42,13 +29,15 @@ const PostView = ({ history, location, match }) => {
         </>
         <button
           className="post-view-go-list-btn"
-          onClick={() => history.goBack()}
+          onClick={() => {
+            navigate(-1);
+          }}
         >
           목록으로 돌아가기
         </button>
       </div>
     </>
   );
-};
+}
 
-export default PostView;
+export default NewsPostView;

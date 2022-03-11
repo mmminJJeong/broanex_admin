@@ -9,13 +9,32 @@ export default function SideMenu() {
         <ul>
           <li>
             <Link to="/news" className="gnb-contents">
-              뉴스 글 관리
+              News Posting
             </Link>
+
+            <div className="ghb-sub">
+              <ul>
+                <li>
+                  <Link to="/newslist" className="gnb-contents">
+                    - News List
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </li>
           <li>
             <Link to="/notice" className="gnb-contents">
-              공지사항 관리
+              Notice Posting
             </Link>
+            <div className="ghb-sub">
+              <ul>
+                <li>
+                  <Link to="/noticeList" className="gnb-contents">
+                    - Notice List
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </li>
         </ul>
       </nav>
