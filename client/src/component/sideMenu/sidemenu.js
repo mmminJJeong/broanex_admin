@@ -17,11 +17,6 @@ export default function SideMenu() {
               공지사항 관리
             </Link>
           </li>
-          <li>
-            <Link to="/" className="gnb-contents">
-              구축사례 관리
-            </Link>
-          </li>
         </ul>
       </nav>
     </div>

@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+
+//글 작성 에디터
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import parse from "html-react-parser";
-import "./page.css";
 import Axios from "axios";
+import Paging from "../component/Paging";
 
-// import EasyImage from "@ckeditor/ckeditor5-easy-image/src/easyimage";
-// import Image from "@ckeditor/ckeditor5-image/src/image";
-// import ImageCaption from "@ckeditor/ckeditor5-image/src/imagecaption";
-// import ImageStyle from "@ckeditor/ckeditor5-image/src/imagestyle";
-// import ImageToolbar from "@ckeditor/ckeditor5-image/src/imagetoolbar";
-// import ImageUpload from "@ckeditor/ckeditor5-image/src/imageupload";
+//css
+import "./page.css";
 
 // import Bold from "@ckeditor/ckeditor5-basic-styles/src/bold";
 // import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
@@ -21,6 +20,7 @@ import Axios from "axios";
 //   plugins: [Paragraph, Bold, Italic, Essentials],
 //   toolbar: ["bold", "italic"],
 // };
+//안됨 ...왜안되는데 ........ 왜......?
 
 export default function NewsEditor() {
   const [newscontent, setNewsContent] = useState({
@@ -30,12 +30,28 @@ export default function NewsEditor() {
 
   const [viewContent, setViewContent] = useState([]);
 
-  useEffect(() => {
-    Axios.get("http://localhost:8000/news/getNewsList").then(response => {
-      setViewContent(response.data);
-    });
-  }, []);
+  const [page, setPage] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [totalPage, setTotalPage] = useState(0);
 
+  // 글 목록 불러오기
+  useEffect(() => {
+    Axios.get("http://localhost:8000/news/getNewsList")
+      .then(response => {
+        setViewContent(response.data);
+      })
+      .then(response => {
+        setTotal(Math.ceil(response.data.totalElements));
+        setTotalPage(Math.ceil(response.data.totalPages));
+      })
+      .then(() => {
+        if (page > total) {
+          setPage(0);
+        }
+      });
+  }, [page, total]);
+
+  //글 작성 업로드
   const submitNews = () => {
     Axios.post("http://localhost:8000/news/saveNews", {
       title: newscontent.title,
@@ -60,14 +76,32 @@ export default function NewsEditor() {
       <div className="news-title">
         <h2>게시물</h2>
       </div>
-      <div className="news-container">
+
+      {/*  글 목록 */}
+      <div className="List">
+        <div className="list_grid list_tit">
+          <div> 제목 </div>
+          <div> 내용 </div>
+        </div>
+
         {viewContent.map((Element, index) => (
-          <div key={index}>
-            <h2>{Element.title}</h2>
-            <div>{parse(Element.content)}</div>
+          <div className="list_grid list_data" key={index}>
+            <h2>
+              <Link to="/view">{Element.title}</Link>
+            </h2>
+
+            <div className="acenter">{parse(Element.content)}</div>
           </div>
         ))}
       </div>
+      <Paging
+        page={page}
+        total={total}
+        setPage={setPage}
+        totalPage={totalPage}
+      />
+
+      {/* 글작성 */}
       <div className="news-title">
         <h2>뉴스 게시글 작성</h2>
       </div>
