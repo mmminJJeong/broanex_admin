@@ -115,14 +115,20 @@
 /* 뷰 */
 
 .post-view-wrapper {
+  position: absolute;
+  left: 14%;
+  top: 95px;
   width: 60%;
   margin: 0 auto;
+  padding: 20px;
+  margin-bottom: 30px;
 }
 
 .post-view-go-list-btn {
   border: 0;
   padding: 10px;
-  background-color: #ffd9d9;
+  background-color: #004cda;
+  color: #fff;
 }
 
 .post-view-row {
