@@ -19,6 +19,7 @@ export default function NoticeEditor() {
     }).then(response => {
       console.log(response);
       alert("등록 완료!");
+      return window.location.replace('/')     
     });
   };
 

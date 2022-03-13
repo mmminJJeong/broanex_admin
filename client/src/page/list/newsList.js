@@ -46,7 +46,7 @@ export default function NewsList() {
 
           {viewContent.map((Element, index) => (
             <div className="list_grid list_data" key={index}>
-              <div>{Element.id}</div>
+              <div>{Element.board_id}</div>
               <h2>
                 <Link to="/newsview">{Element.title}</Link>
               </h2>

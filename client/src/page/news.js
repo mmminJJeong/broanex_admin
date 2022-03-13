@@ -8,31 +8,33 @@ import Axios from "axios";
 //css
 import "./page.css";
 
-// import Bold from "@ckeditor/ckeditor5-basic-styles/src/bold";
-// import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
-// import Essentials from "@ckeditor/ckeditor5-essentials/src/essentials";
-// import Paragraph from "@ckeditor/ckeditor5-paragraph/src/paragraph";
-
-// const editorConfiguration = {
-//   plugins: [Paragraph, Bold, Italic, Essentials],
-//   toolbar: ["bold", "italic"],
-// };
-//안됨 ...왜안되는데 ........ 왜......?
-
 export default function NewsEditor() {
   const [newscontent, setNewsContent] = useState({
     title: "",
     content: "",
+    date:"",
+    image:"",
   });
+
+  //현재날짜
+  const today = new Date();
+
+  const year = today.getFullYear();
+  const month = ('0' + (today.getMonth() + 1)).slice(-2);
+  const day = ('0' + today.getDate()).slice(-2);
+  
+  const nowDate = year + '-' + month  + '-' + day;
 
   //글 작성 업로드
   const submitNews = () => {
     Axios.post("http://localhost:8000/news/saveNews", {
       title: newscontent.title,
       content: newscontent.content,
+      date:nowDate.date,
     }).then(response => {
       console.log(response);
       alert("등록 완료!");
+      // return window.location.replace('/')  
     });
   };
 
@@ -75,8 +77,11 @@ export default function NewsEditor() {
             });
             console.log(newscontent);
           }}
-          // config={editorConfiguration}
+
         />
+        <form method="post" encType="multipart/form-data">
+          <input type="file" name="image"/>
+        </form>
         <button className="submit-button" onClick={submitNews}>
           입력
         </button>

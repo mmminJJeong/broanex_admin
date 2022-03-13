@@ -3,6 +3,9 @@ const mysql = require("mysql");
 const router = express.Router();
 const bodyParser = require("body-parser");
 const { urlencoded } = require("body-parser");
+const multer = require("multer");
+const path = require("path");
+const e = require("express");
 
 const db = mysql.createPool({
   host: "broanex-test.ctujfjmdd0pi.ap-northeast-2.rds.amazonaws.com",
@@ -17,7 +20,21 @@ const db = mysql.createPool({
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
-//불러오는 주소
+
+// 이미지 저장
+const storage = multer.diskStorage({
+destination: function (req, file, cb) {
+  cb(null, "public/image/");
+},
+filename: function (req, file, cb) {
+  const ext = path.extname(file.originalname);
+  cb(null, path.basename(file.originalname, ext) + "-" + Date.now() + ext)  ;
+},
+});
+
+const upload = multer({storage: storage});
+
+//글리스트 불러오는 주소
 router.get("/getNewsList", (req, res) => {
   const sqlQuery = "SELECT * FROM sample.news;";
   db.query(sqlQuery, (err, result) => {
@@ -26,13 +43,28 @@ router.get("/getNewsList", (req, res) => {
 });
 
 //저장하는 주소
-router.post("/saveNews", (req, res) => {
+router.post("/saveNews", upload.single("image"), (req, res) => {
+  const creator_id = req.body.creator_id
   const title = req.body.title;
   const content = req.body.content;
-  const sqlQuery = "INSERT INTO sample.news (title, content) VALUES (?,?)";
-  db.query(sqlQuery, [title, content], (err, result) => {
+  const date = req.body.date;
+  const image= `/images/&{req.file.filename}`;
+  const sqlQuery = "INSERT INTO sample.news (creator_id, title, content, date, image) VALUES (?,?,?,?,?)";
+  db.query(sqlQuery, [creator_id, title, content, date, image], (err, result) => {
     res.send(err);
   });
+});
+
+// 글 불러오기
+router.get("/getNewsPost", (req, res) => {
+  const sqlQuery = "SELECT * FROM sample.news;";
+ connection.query(sqlQuery,(err, row)=> {
+   if (err) {
+     console.error(err);
+   }else {
+     res.render("getNewsPost", {title:"글 조회", rows:row});
+   }
+ });
 });
 
 module.exports = router;
