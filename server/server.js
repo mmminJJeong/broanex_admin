@@ -13,6 +13,7 @@ app.use("/", news);
 app.use("/news", index);
 app.use("/api/notice", notice);
 app.use("/notice", noticeIndex);
+app.use("/upload_files", index);
 
 var port = process.env.PORT || 8000;
 app.listen(port, () => console.log(`running on port ${port}`));

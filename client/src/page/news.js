@@ -4,41 +4,44 @@ import React, { useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Axios from "axios";
-
 //css
 import "./page.css";
+
+const UPLOAD_ENDPOINT = "upload_files";
 
 export default function NewsEditor() {
   const [newscontent, setNewsContent] = useState({
     title: "",
     content: "",
-    date:"",
-    image:"",
+    image: "",
   });
 
   //현재날짜
   const today = new Date();
 
   const year = today.getFullYear();
-  const month = ('0' + (today.getMonth() + 1)).slice(-2);
-  const day = ('0' + today.getDate()).slice(-2);
-  
-  const nowDate = year + '-' + month  + '-' + day;
+  const month = ("0" + (today.getMonth() + 1)).slice(-2);
+  const day = ("0" + today.getDate()).slice(-2);
+
+  const nowDate = year + "-" + month + "-" + day;
 
   //글 작성 업로드
   const submitNews = () => {
+    // debugger;
     Axios.post("http://localhost:8000/news/saveNews", {
       title: newscontent.title,
       content: newscontent.content,
-      date:nowDate.date,
-    }).then(response => {
+      date: nowDate,
+      creator_id: null,
+      image: null,
+    }).then((response) => {
       console.log(response);
       alert("등록 완료!");
-      // return window.location.replace('/')  
+      // return window.location.replace('/')
     });
   };
 
-  const getValue = e => {
+  const getValue = (e) => {
     const { name, value } = e.target;
     setNewsContent({
       ...newscontent,
@@ -46,6 +49,42 @@ export default function NewsEditor() {
     });
     console.log(newscontent);
   };
+
+  const custom_config = {
+    extraPlugins: [uploadPlugin],
+  };
+
+  function MyUploadAdapter(loader) {
+    return {
+      upload: () => {
+        return new Promise((resolve, reject) => {
+          const body = new FormData();
+          loader.file.then((file) => {
+            body.append("files", file);
+            fetch(`${"http://localhost:8000"}/${UPLOAD_ENDPOINT}`, {
+              method: "post",
+              body: body,
+            })
+              .then((res) => res.json())
+              .then((res) => {
+                resolve({
+                  default: `${"http://localhost:8000"}/${res.filename}`,
+                });
+              })
+              .catch((err) => {
+                reject(err);
+              });
+          });
+        });
+      },
+    };
+  }
+
+  function uploadPlugin(editor) {
+    editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+      return MyUploadAdapter(loader);
+    };
+  }
 
   return (
     <div className="main-wrapper">
@@ -62,9 +101,10 @@ export default function NewsEditor() {
           name="title"
         />
         <CKEditor
+          config={custom_config}
           editor={ClassicEditor}
           data="<p>내용을 입력해주세요.</p>"
-          onReady={editor => {
+          onReady={(editor) => {
             // You can store the "editor" and use when it is needed.
             console.log("Editor is ready to use!");
           }}
@@ -77,10 +117,9 @@ export default function NewsEditor() {
             });
             console.log(newscontent);
           }}
-
         />
         <form method="post" encType="multipart/form-data">
-          <input type="file" name="image"/>
+          <input type="file" name="image" />
         </form>
         <button className="submit-button" onClick={submitNews}>
           입력

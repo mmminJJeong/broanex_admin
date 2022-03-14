@@ -5,7 +5,8 @@ const bodyParser = require("body-parser");
 const { urlencoded } = require("body-parser");
 const multer = require("multer");
 const path = require("path");
-const e = require("express");
+const app = express();
+const cors = require("cors");
 
 const db = mysql.createPool({
   host: "broanex-test.ctujfjmdd0pi.ap-northeast-2.rds.amazonaws.com",
@@ -17,22 +18,40 @@ const db = mysql.createPool({
   waitForConnections: true,
 });
 
-router.use(bodyParser.urlencoded({ extended: true }));
-router.use(bodyParser.json());
-
-
-// 이미지 저장
 const storage = multer.diskStorage({
-destination: function (req, file, cb) {
-  cb(null, "public/image/");
-},
-filename: function (req, file, cb) {
-  const ext = path.extname(file.originalname);
-  cb(null, path.basename(file.originalname, ext) + "-" + Date.now() + ext)  ;
-},
+  destination: function (req, file, cb) {
+    cb(null, "public/image/");
+  },
+  filename: function (req, file, cb) {
+    let ext = file.originalname.split;
+    cb(null, path.basename(file.originalname, ext) + "-" + Date.now() + ext);
+  },
 });
 
-const upload = multer({storage: storage});
+const upload = multer({ storage: storage });
+
+var corsOptions = {
+  origin: "http://localhost:3000",
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  credentials: true,
+};
+
+app.use([
+  express.static("public"),
+  express.json(),
+  cors(corsOptions),
+  upload.array("files"),
+]);
+
+router.post("/upload_files", (req, res) => {
+  // console.log(req.body);
+  if (req.files.length > 0) {
+    res.json(req.files[0]);
+  }
+});
+
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json());
 
 //글리스트 불러오는 주소
 router.get("/getNewsList", (req, res) => {
@@ -43,28 +62,33 @@ router.get("/getNewsList", (req, res) => {
 });
 
 //저장하는 주소
-router.post("/saveNews", upload.single("image"), (req, res) => {
-  const creator_id = req.body.creator_id
+router.post("/saveNews", (req, res) => {
+  const creator_id = req.body.creator_id;
   const title = req.body.title;
   const content = req.body.content;
   const date = req.body.date;
-  const image= `/images/&{req.file.filename}`;
-  const sqlQuery = "INSERT INTO sample.news (creator_id, title, content, date, image) VALUES (?,?,?,?,?)";
-  db.query(sqlQuery, [creator_id, title, content, date, image], (err, result) => {
-    res.send(err);
-  });
+  const image = req.body.image;
+  const sqlQuery =
+    "INSERT INTO sample.news (creator_id, title, content, date, image) VALUES (?,?,?,?,?)";
+  db.query(
+    sqlQuery,
+    [creator_id, title, content, date, image],
+    (err, result) => {
+      res.send(err);
+    }
+  );
 });
 
 // 글 불러오기
 router.get("/getNewsPost", (req, res) => {
   const sqlQuery = "SELECT * FROM sample.news;";
- connection.query(sqlQuery,(err, row)=> {
-   if (err) {
-     console.error(err);
-   }else {
-     res.render("getNewsPost", {title:"글 조회", rows:row});
-   }
- });
+  connection.query(sqlQuery, (err, row) => {
+    if (err) {
+      console.error(err);
+    } else {
+      res.render("getNewsPost", { title: "글 조회", rows: row });
+    }
+  });
 });
 
 module.exports = router;
