@@ -76,7 +76,10 @@
 .list_data {
   line-height: 40px;
 }
-
+.list_data {
+  height: 50px;
+  overflow: hidden;
+}
 /* 버튼 스타일 */
 .btn-2 {
   border-radius: 200px;
@@ -124,7 +127,9 @@
   margin-bottom: 30px;
   border: 1px solid #cfcfcf;
 }
-
+.post-view-content {
+  margin-bottom: 20px;
+}
 .post-view-go-list-btn {
   border: 0;
   padding: 10px;

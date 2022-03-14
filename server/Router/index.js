@@ -5,8 +5,6 @@ const bodyParser = require("body-parser");
 const { urlencoded } = require("body-parser");
 const multer = require("multer");
 const path = require("path");
-const app = express();
-const cors = require("cors");
 
 const db = mysql.createPool({
   host: "broanex-test.ctujfjmdd0pi.ap-northeast-2.rds.amazonaws.com",
@@ -20,39 +18,42 @@ const db = mysql.createPool({
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public/image/");
+    try {
+      cb(null, "image/");
+    } catch (error) {
+      console.log("error : " + error);
+    }
   },
   filename: function (req, file, cb) {
-    let ext = file.originalname.split;
-    cb(null, path.basename(file.originalname, ext) + "-" + Date.now() + ext);
+    cb(null, file.originalname);
   },
-});
-
-const upload = multer({ storage: storage });
-
-var corsOptions = {
-  origin: "http://localhost:3000",
-  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-  credentials: true,
-};
-
-app.use([
-  express.static("public"),
-  express.json(),
-  cors(corsOptions),
-  upload.array("files"),
-]);
-
-router.post("/upload_files", (req, res) => {
-  // console.log(req.body);
-  if (req.files.length > 0) {
-    res.json(req.files[0]);
-  }
 });
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
+router.post("/upload_files", (req, res, next) => {
+  upload(req, res, function (err) {
+    console.log("req.file : " + req.file);
+    if (err instanceof multer.MulterError) {
+      console.log(1);
+      return next(err);
+    } else if (err) {
+      console.log(2);
+      return next(err);
+    }
+    console.log(`원본 파일명 : ${req.file.originalname}`);
+    console.log(`저장 파일명 : ${req.file.filename}`);
+    console.log(`크기 : ${req.file.size}`);
+    return res.json({ filename: req.file.filename });
+    // return {
+    //   file: path.json(upload, file.name),
+    //   editor: editor,
+    // };
+  });
+});
+
+const upload = multer({ storage: storage }).single("file");
 //글리스트 불러오는 주소
 router.get("/getNewsList", (req, res) => {
   const sqlQuery = "SELECT * FROM sample.news;";
@@ -81,12 +82,15 @@ router.post("/saveNews", (req, res) => {
 
 // 글 불러오기
 router.get("/getNewsPost", (req, res) => {
-  const sqlQuery = "SELECT * FROM sample.news;";
-  connection.query(sqlQuery, (err, row) => {
-    if (err) {
-      console.error(err);
+  // sql query 문
+  const sql = "SELECT * FROM sample.news WHERE board_id = ?";
+  // 전달받은 parameter 값
+  const params = req.query.board_id;
+  db.query(sql, params, (err, data) => {
+    if (!err) {
+      res.send(data);
     } else {
-      res.render("getNewsPost", { title: "글 조회", rows: row });
+      res.send(err);
     }
   });
 });

@@ -4,26 +4,40 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Axios from "axios";
 
 import "./page.css";
+const UPLOAD_ENDPOINT = "upload_img_files";
 
 export default function NoticeEditor() {
   const [noticeContent, setNoticeContent] = useState({
     title: "",
     content: "",
+    image: "",
   });
+
+  //현재날짜
+  const today = new Date();
+
+  const year = today.getFullYear();
+  const month = ("0" + (today.getMonth() + 1)).slice(-2);
+  const day = ("0" + today.getDate()).slice(-2);
+
+  const nowDate = year + "-" + month + "-" + day;
 
   //글 등록
   const submitNotice = () => {
     Axios.post("http://localhost:8000/notice/saveNotice", {
       title: noticeContent.title,
       content: noticeContent.content,
-    }).then(response => {
+      date: nowDate,
+      creator_id: null,
+      image: null,
+    }).then((response) => {
       console.log(response);
       alert("등록 완료!");
-      return window.location.replace('/')     
+      // return window.location.replace("/");
     });
   };
 
-  const getValue = e => {
+  const getValue = (e) => {
     const { name, value } = e.target;
     setNoticeContent({
       ...noticeContent,
@@ -32,6 +46,45 @@ export default function NoticeEditor() {
     console.log(noticeContent);
   };
 
+  //이미지 저장
+  const custom_config = {
+    extraPlugins: [uploadPlugin],
+  };
+
+  function MyUploadAdapter(loader) {
+    return {
+      upload: () => {
+        return new Promise((resolve, reject) => {
+          const body = new FormData();
+          loader.file.then((file) => {
+            body.append("file", file);
+            fetch(
+              `http://localhost:8000/${UPLOAD_ENDPOINT}/${UPLOAD_ENDPOINT}`,
+              {
+                method: "post",
+                body: body,
+              }
+            )
+              .then((res) => res.json())
+              .then((res) => {
+                resolve({
+                  default: `${"http://localhost:8000"}/${res.filename}`, //업로드 된 파일 주소
+                });
+              })
+              .catch((err) => {
+                reject(err);
+              });
+          });
+        });
+      },
+    };
+  }
+
+  function uploadPlugin(editor) {
+    editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+      return MyUploadAdapter(loader);
+    };
+  }
   return (
     <div className="main-wrapper">
       <div className="news-title">
@@ -46,9 +99,10 @@ export default function NoticeEditor() {
           name="title"
         />
         <CKEditor
+          config={custom_config}
           editor={ClassicEditor}
           data="<p>내용을 입력해주세요.</p>"
-          onReady={editor => {
+          onReady={(editor) => {
             // You can store the "editor" and use when it is needed.
             console.log("Editor is ready to use!");
           }}
@@ -62,7 +116,9 @@ export default function NoticeEditor() {
             console.log(noticeContent);
           }}
         />
-
+        <form method="post" encType="multipart/form-data">
+          <input type="file" name="image" />
+        </form>
         <button className="submit-button" onClick={submitNotice}>
           입력
         </button>

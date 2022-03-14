@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-
-//글 작성 에디터
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Axios from "axios";
@@ -27,7 +25,6 @@ export default function NewsEditor() {
 
   //글 작성 업로드
   const submitNews = () => {
-    // debugger;
     Axios.post("http://localhost:8000/news/saveNews", {
       title: newscontent.title,
       content: newscontent.content,
@@ -41,6 +38,7 @@ export default function NewsEditor() {
     });
   };
 
+  //전송 값
   const getValue = (e) => {
     const { name, value } = e.target;
     setNewsContent({
@@ -50,6 +48,7 @@ export default function NewsEditor() {
     console.log(newscontent);
   };
 
+  //이미지 저장
   const custom_config = {
     extraPlugins: [uploadPlugin],
   };
@@ -60,15 +59,18 @@ export default function NewsEditor() {
         return new Promise((resolve, reject) => {
           const body = new FormData();
           loader.file.then((file) => {
-            body.append("files", file);
-            fetch(`${"http://localhost:8000"}/${UPLOAD_ENDPOINT}`, {
-              method: "post",
-              body: body,
-            })
+            body.append("file", file);
+            fetch(
+              `http://localhost:8000/${UPLOAD_ENDPOINT}/${UPLOAD_ENDPOINT}`,
+              {
+                method: "post",
+                body: body,
+              }
+            )
               .then((res) => res.json())
               .then((res) => {
                 resolve({
-                  default: `${"http://localhost:8000"}/${res.filename}`,
+                  default: `${"http://localhost:8000"}/${res.filename}`, //업로드 된 파일 주소
                 });
               })
               .catch((err) => {
@@ -88,7 +90,6 @@ export default function NewsEditor() {
 
   return (
     <div className="main-wrapper">
-      {/* 글작성 */}
       <div className="news-title">
         <h2>뉴스 게시글 작성</h2>
       </div>
