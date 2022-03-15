@@ -73,7 +73,7 @@ export default function NewsEditor() {
               .then((res) => res.json())
               .then((res) => {
                 resolve({
-                  default: `${"http://localhost:8000"}/${res.filename}`, //업로드 된 파일 주소
+                  default: `http://localhost:8000/image/${res.filename}`, //업로드 된 파일 주소
                 });
               })
               .catch((err) => {

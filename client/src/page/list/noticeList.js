@@ -23,7 +23,6 @@ export default function NoticeList() {
             <div> 글 번호 </div>
             <div> 제목 </div>
             <div>작성자</div>
-            <div> 내용 </div>
             <div>작성 날짜</div>
           </div>
 
@@ -36,10 +35,7 @@ export default function NoticeList() {
                 </Link>
               </h2>
               <div>{Element.creator_id}</div>
-              <div
-                className="acenter"
-                dangerouslySetInnerHTML={{ __html: Element.content }}
-              ></div>
+
               <div>{Element.date}</div>
             </div>
           ))}
