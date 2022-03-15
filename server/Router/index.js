@@ -4,9 +4,6 @@ const router = express.Router();
 const bodyParser = require("body-parser");
 const { urlencoded } = require("body-parser");
 const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
-const request = require("request");
 
 const db = mysql.createPool({
   host: "broanex-test.ctujfjmdd0pi.ap-northeast-2.rds.amazonaws.com",
@@ -29,6 +26,7 @@ const storage = multer.diskStorage({
     }
   },
   filename: function (req, file, cb) {
+    console.log(file.originalname);
     cb(null, file.originalname);
   },
 });
@@ -38,23 +36,22 @@ router.use(bodyParser.json());
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 1000000 },
 }).single("file");
 
 router.post("/upload_files", (req, res, next) => {
   upload(req, res, function (err) {
-    console.log("req.file : " + req.file);
+    console.log("req.file : " + req);
     if (err instanceof multer.MulterError) {
-      console.log(1);
-      return next(err);
-    } else if (err) {
-      console.log(2);
-      return next(err);
+      //   console.log(1);
+      //   return next(err);
+      // } else if (err) {
+      //   console.log(2);
+      //   return next(err);
     }
     console.log(`원본 파일명 : ${req.file.originalname}`);
     console.log(`저장 파일명 : ${req.file.filename}`);
     console.log(`크기 : ${req.file.size}`);
-    return res.json({ filename: req.file.filename });
+    return res.json(req.file);
   });
 });
 
