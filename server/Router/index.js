@@ -29,9 +29,14 @@ router.get("/getNewsList", (req, res) => {
 router.post("/saveNews", (req, res) => {
   const title = req.body.title;
   const content = req.body.content;
+<<<<<<< HEAD
   const sqlQuery =
     "INSERT INTO sample.news (title, content, date) VALUES (?,?,?)"; //저정하는 느낌으로 추가했는데 안됨...
   db.query(sqlQuery, [title, content, date], (err, result) => {
+=======
+  const sqlQuery = "INSERT INTO sample.news (title, content) VALUES (?,?)";
+  db.query(sqlQuery, [title, content], (err, result) => {
+>>>>>>> parent of a6b6905 (리셋 후 재 창조)
     res.send(err);
   });
 });
