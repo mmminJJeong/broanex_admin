@@ -142,5 +142,8 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "@ckeditor/ckeditor5-alignment": "^33.0.0"
   }
 }

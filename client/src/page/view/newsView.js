@@ -8,6 +8,11 @@ function NewsPostView(match) {
   const navigate = useNavigate(); // 뒤로가기 v6라서 usehistory =>navigate
   const [data, setData] = useState({});
   const { board_id } = useParams();
+  // const [image, setImage] = useState(null);
+
+  // const onChange = (e) => {
+  //   setImage(e.target.files[0]);
+  // };
 
   useEffect(() => {
     try {
@@ -40,7 +45,7 @@ function NewsPostView(match) {
               </div>
               <div className="post-view-row">
                 <label>내용</label>
-                <div>{data.content}</div>
+                <div dangerouslySetInnerHTML={{ __html: data.content }}></div>
               </div>
             </>
           ) : (

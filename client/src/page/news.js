@@ -23,6 +23,10 @@ export default function NewsEditor() {
 
   const nowDate = year + "-" + month + "-" + day;
 
+  const onChange = (e) => {
+    setNewsContent(e.target.files[0]);
+  };
+
   //글 작성 업로드
   const submitNews = () => {
     Axios.post("http://localhost:8000/news/saveNews", {
@@ -37,7 +41,6 @@ export default function NewsEditor() {
       // return window.location.replace('/')
     });
   };
-
   //전송 값
   const getValue = (e) => {
     const { name, value } = e.target;
@@ -120,7 +123,7 @@ export default function NewsEditor() {
           }}
         />
         <form method="post" encType="multipart/form-data">
-          <input type="file" name="image" />
+          <input type="file" name="image" onChange={onChange} />
         </form>
         <button className="submit-button" onClick={submitNews}>
           입력

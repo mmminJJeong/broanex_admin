@@ -71,7 +71,7 @@ router.post("/saveNotice", (req, res) => {
   const date = req.body.date;
   const image = req.body.image;
   const sqlQuery =
-    "INSERT INTO sample.news (creator_id, title, content, date, image) VALUES (?,?,?,?,?)";
+    "INSERT INTO sample.notice (creator_id, title, content, date, image) VALUES (?,?,?,?,?)";
   db.query(
     sqlQuery,
     [creator_id, title, content, date, image],
@@ -84,7 +84,7 @@ router.post("/saveNotice", (req, res) => {
 //작성한 페이지 불러오기
 router.get("/getNoticePost", (req, res) => {
   // sql query 문
-  const sql = "SELECT * FROM sample.news WHERE board_id = ?";
+  const sql = "SELECT * FROM sample.notice WHERE board_id = ?";
   // 전달받은 parameter 값
   const params = req.query.board_id;
   db.query(sql, params, (err, data) => {
