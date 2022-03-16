@@ -7,11 +7,11 @@ const multer = require("multer");
 const path = require("path");
 
 const db = mysql.createPool({
-  host: "broanex-test.ctujfjmdd0pi.ap-northeast-2.rds.amazonaws.com",
-  user: "minjeong",
-  password: "asd134652",
-  database: "sample",
-  port: "3310",
+  host: "211.214.247.21",
+  user: "broanexdev",
+  password: "broanexdev2020!",
+  database: "broanex_board",
+  port: "3306",
   connectionLimit: 66,
   waitForConnections: true,
 });
@@ -57,7 +57,7 @@ router.post("/upload_img_files", (req, res, next) => {
 
 //글 리스트 불러오기
 router.get("/getNoticeList", (req, res) => {
-  const sqlQuery = "SELECT * FROM sample.notice;";
+  const sqlQuery = "SELECT * FROM broanex_board.notice;";
   db.query(sqlQuery, (err, result) => {
     res.send(result);
   });
@@ -71,7 +71,7 @@ router.post("/saveNotice", (req, res) => {
   const date = req.body.date;
   const image = req.body.image;
   const sqlQuery =
-    "INSERT INTO sample.notice (creator_id, title, content, date, image) VALUES (?,?,?,?,?)";
+    "INSERT INTO broanex_board.notice (creator_id, title, content, date, image) VALUES (?,?,?,?,?)";
   db.query(
     sqlQuery,
     [creator_id, title, content, date, image],
@@ -84,7 +84,7 @@ router.post("/saveNotice", (req, res) => {
 //작성한 페이지 불러오기
 router.get("/getNoticePost", (req, res) => {
   // sql query 문
-  const sql = "SELECT * FROM sample.notice WHERE board_id = ?";
+  const sql = "SELECT * FROM broanex_board.notice WHERE board_id = ?";
   // 전달받은 parameter 값
   const params = req.query.board_id;
   db.query(sql, params, (err, data) => {

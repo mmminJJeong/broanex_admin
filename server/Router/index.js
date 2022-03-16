@@ -6,11 +6,11 @@ const { urlencoded } = require("body-parser");
 const multer = require("multer");
 
 const db = mysql.createPool({
-  host: "broanex-test.ctujfjmdd0pi.ap-northeast-2.rds.amazonaws.com",
-  user: "minjeong",
-  password: "asd134652",
-  database: "sample",
-  port: "3310",
+  host: "211.214.247.21",
+  user: "broanexdev",
+  password: "broanexdev2020!",
+  database: "broanex_board",
+  port: "3306",
   connectionLimit: 66,
   waitForConnections: true,
 });
@@ -57,7 +57,7 @@ router.post("/upload_files", (req, res, next) => {
 
 //글리스트 불러오는 주소
 router.get("/getNewsList", (req, res) => {
-  const sqlQuery = "SELECT * FROM sample.news;";
+  const sqlQuery = "SELECT * FROM broanex_board.news;";
   db.query(sqlQuery, (err, result) => {
     res.send(result);
   });
@@ -71,7 +71,7 @@ router.post("/saveNews", (req, res) => {
   const date = req.body.date;
   const image = req.body.image;
   const sqlQuery =
-    "INSERT INTO sample.news (creator_id, title, content, date, image) VALUES (?,?,?,?,?)";
+    "INSERT INTO broanex_board.news (creator_id, title, content, date, image) VALUES (?,?,?,?,?)";
   db.query(
     sqlQuery,
     [creator_id, title, content, date, image],
@@ -84,7 +84,7 @@ router.post("/saveNews", (req, res) => {
 // 글 불러오기
 router.get("/getNewsPost", (req, res) => {
   // sql query 문
-  const sql = "SELECT * FROM sample.news WHERE board_id = ?";
+  const sql = "SELECT * FROM broanex_board.news WHERE board_id = ?";
   // 전달받은 parameter 값
   const params = req.query.board_id;
   db.query(sql, params, (err, data) => {
