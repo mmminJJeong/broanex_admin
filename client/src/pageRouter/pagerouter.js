@@ -15,7 +15,7 @@ export default function Router() {
     { path: "/newsview", element: <NewsPostView /> },
     { path: "/newsview/:board_id", element: <NewsPostView /> },
     { path: "/noticeview", element: <NoticePostView /> },
-    { path: "/noticeview:board_id", element: <NoticePostView /> },
+    { path: "/noticeview/:board_id", element: <NoticePostView /> },
     { path: "/newsList", element: <NewsList /> },
     { path: "/noticeList", element: <NoticeList /> },
   ]);

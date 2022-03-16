@@ -33,10 +33,11 @@ export default function NoticeEditor() {
     }).then((response) => {
       console.log(response);
       alert("등록 완료!");
-      // return window.location.replace("/");
+      return window.location.replace("/");
     });
   };
 
+  //전송값
   const getValue = (e) => {
     const { name, value } = e.target;
     setNoticeContent({
@@ -68,7 +69,7 @@ export default function NoticeEditor() {
               .then((res) => res.json())
               .then((res) => {
                 resolve({
-                  default: `${"http://localhost:8000"}/${res.filename}`, //업로드 된 파일 주소
+                  default: `http://localhost:8000/image/${res.filename}`, //업로드 된 파일 주소
                 });
               })
               .catch((err) => {

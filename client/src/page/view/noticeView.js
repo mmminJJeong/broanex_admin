@@ -40,7 +40,7 @@ function NoticePostView() {
               </div>
               <div className="post-view-row">
                 <label>내용</label>
-                <div>{data.content}</div>
+                <div dangerouslySetInnerHTML={{ __html: data.content }}></div>
               </div>
             </>
           ) : (

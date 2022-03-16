@@ -25,6 +25,7 @@ const storage = multer.diskStorage({
     }
   },
   filename: function (req, file, cb) {
+    console.log(file.originalname);
     cb(null, file.originalname);
   },
 });
@@ -32,28 +33,27 @@ const storage = multer.diskStorage({
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
+const upload = multer({
+  storage: storage,
+}).single("file");
+
 //이미지 저장
 router.post("/upload_img_files", (req, res, next) => {
   upload(req, res, function (err) {
-    console.log("req.file : " + req.file);
+    console.log("req.file : " + req);
     if (err instanceof multer.MulterError) {
-      console.log(1);
-      return next(err);
-    } else if (err) {
-      console.log(2);
-      return next(err);
+      //   console.log(1);
+      //   return next(err);
+      // } else if (err) {
+      //   console.log(2);
+      //   return next(err);
     }
     console.log(`원본 파일명 : ${req.file.originalname}`);
     console.log(`저장 파일명 : ${req.file.filename}`);
     console.log(`크기 : ${req.file.size}`);
-    return res.json({ filename: req.file.filename });
-    // return {
-    //   file: path.json(upload, file.name),
-    //   editor: editor,
-    // };
+    return res.json(req.file);
   });
 });
-const upload = multer({ storage: storage }).single("file");
 
 //글 리스트 불러오기
 router.get("/getNoticeList", (req, res) => {
