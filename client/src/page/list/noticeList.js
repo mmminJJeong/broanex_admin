@@ -9,9 +9,11 @@ export default function NoticeList() {
 
   //글 목록 리스트
   useEffect(() => {
-    Axios.get("http://localhost:8000/notice/getNoticeList").then((respones) => {
-      setViewMoreContent(respones.data);
-    });
+    Axios.get("http://211.214.247.21:8000/notice/getNoticeList").then(
+      (respones) => {
+        setViewMoreContent(respones.data);
+      }
+    );
   }, []);
 
   return (

@@ -16,7 +16,7 @@ function NewsPostView(match) {
 
   useEffect(() => {
     try {
-      Axios.get("http://localhost:8000/news/getNewsPost", {
+      Axios.get("http://211.214.247.21:8000/news/getNewsPost", {
         params: {
           board_id: board_id,
         },

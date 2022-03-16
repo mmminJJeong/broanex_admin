@@ -11,9 +11,11 @@ export default function NewsList() {
 
   // 글 목록 불러오기
   useEffect(() => {
-    Axios.get("http://localhost:8000/news/getNewsList").then((response) => {
-      setViewContent(response.data);
-    });
+    Axios.get("http://211.214.247.21:8000/news/getNewsList").then(
+      (response) => {
+        setViewContent(response.data);
+      }
+    );
   }, []);
 
   return (

@@ -11,7 +11,7 @@ function NoticePostView() {
 
   useEffect(() => {
     try {
-      Axios.get("http://localhost:8000/notice/getNoticePost", {
+      Axios.get("http://211.214.247.21:8000/notice/getNoticePost", {
         params: {
           board_id: board_id,
         },

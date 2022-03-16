@@ -29,7 +29,7 @@ export default function NewsEditor() {
 
   //글 작성 업로드
   const submitNews = () => {
-    Axios.post("http://localhost:8000/news/saveNews", {
+    Axios.post("http://211.214.247.21:8000/news/saveNews", {
       title: newscontent.title,
       content: newscontent.content,
       date: nowDate,
@@ -64,7 +64,7 @@ export default function NewsEditor() {
           loader.file.then((file) => {
             body.append("file", file);
             fetch(
-              `http://localhost:8000/${UPLOAD_ENDPOINT}/${UPLOAD_ENDPOINT}`,
+              `http://211.214.247.21:8000/${UPLOAD_ENDPOINT}/${UPLOAD_ENDPOINT}`,
               {
                 method: "post",
                 body: body,
@@ -73,7 +73,7 @@ export default function NewsEditor() {
               .then((res) => res.json())
               .then((res) => {
                 resolve({
-                  default: `http://localhost:8000/image/${res.filename}`, //업로드 된 파일 주소
+                  default: `http://211.214.247.21:8000/image/${res.filename}`, //업로드 된 파일 주소
                 });
               })
               .catch((err) => {
