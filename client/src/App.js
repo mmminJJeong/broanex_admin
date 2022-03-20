@@ -3,11 +3,13 @@ import "./reset.css";
 import MainHeader from "./component/layout/header";
 import SideMenu from "./component/sideMenu/sidemenu";
 import Router from "./pageRouter/pagerouter";
+import Login from "./page/login";
 
 function App() {
   return (
     <>
-      <div className="wrap">
+      <Login />
+      <div className="wrap main">
         <MainHeader />
         <SideMenu />
         <Router />
