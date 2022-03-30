@@ -6,16 +6,16 @@ import Router from "./pageRouter/pagerouter";
 import Login from "./page/login";
 
 function App() {
-  return (
-    <>
-      <Login />
-      <div className="wrap main">
-        <MainHeader />
-        <SideMenu />
-        <Router />
-      </div>
-    </>
-  );
+    return (
+        <>
+            <Login />
+            <div className='wrap main'>
+                <MainHeader />
+                <SideMenu />
+                <Router />
+            </div>
+        </>
+    );
 }
 
 export default App;
